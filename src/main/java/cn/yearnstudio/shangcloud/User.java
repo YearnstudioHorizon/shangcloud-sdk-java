@@ -5,4 +5,7 @@ public interface User {
     void save();
     boolean isExpired();
     UserBasicInfo getBasicInfo() throws ShangCloudException;
+    String getVariable(String key) throws ShangCloudException;
+    void setVariable(String key, String value) throws ShangCloudException;
+    void deleteVariable(String key) throws ShangCloudException;
 }

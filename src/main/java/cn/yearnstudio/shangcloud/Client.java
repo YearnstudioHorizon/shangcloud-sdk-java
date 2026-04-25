@@ -107,6 +107,20 @@ public class Client {
         return GSON.fromJson(responseBody, UserBasicInfo.class);
     }
 
+    String variableAction(String action, String key, String value,
+                          String accessToken, String tokenType) throws ShangCloudException {
+        VariableRequest body = new VariableRequest();
+        body.key = key;
+        body.action = action;
+        body.value = value;
+        String responseBody = request("/api/varibles", GSON.toJson(body), accessToken, tokenType);
+        VariableResponse resp = GSON.fromJson(responseBody, VariableResponse.class);
+        if (resp != null && resp.error != null && !resp.error.isEmpty()) {
+            throw new ShangCloudException("variable " + action + " failed: " + resp.error);
+        }
+        return resp != null && resp.value != null ? resp.value : "";
+    }
+
     String request(String path, String jsonBody, String accessToken, String tokenType) throws ShangCloudException {
         HttpRequest req = HttpRequest.newBuilder()
             .uri(URI.create(baseUrl + path))
@@ -137,5 +151,16 @@ public class Client {
         @SerializedName("refresh_token") String refreshToken;
         @SerializedName("token_type") String tokenType;
         @SerializedName("expires_in") int expiresIn;
+    }
+
+    private static class VariableRequest {
+        String key;
+        String action;
+        String value;
+    }
+
+    private static class VariableResponse {
+        String value;
+        String error;
     }
 }

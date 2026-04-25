@@ -116,10 +116,23 @@ public interface User {
     void save();
     boolean isExpired();
     UserBasicInfo getBasicInfo() throws ShangCloudException;
+    String getVariable(String key) throws ShangCloudException;
+    void setVariable(String key, String value) throws ShangCloudException;
+    void deleteVariable(String key) throws ShangCloudException;
 }
 ```
 
 SDK 提供了默认的内存实现 `UserInstance`。`isExpired()` 提前 60 秒返回 `true`，`getBasicInfo()` 会请求 `/api/user/info`。
+
+### 用户变量读写
+
+`getVariable` / `setVariable` / `deleteVariable` 通过 `/api/varibles` 操作当前用户的变量存储，需要授权时携带 `var:io` scope。
+
+```java
+user.setVariable("theme", "dark");
+String value = user.getVariable("theme");
+user.deleteVariable("theme");
+```
 
 ### `UserBasicInfo`
 

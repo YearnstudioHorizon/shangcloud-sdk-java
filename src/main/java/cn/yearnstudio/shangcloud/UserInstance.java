@@ -35,6 +35,21 @@ public class UserInstance implements User {
         return client.getUserBasicInfo(accessToken, tokenType);
     }
 
+    @Override
+    public String getVariable(String key) throws ShangCloudException {
+        return client.variableAction("read", key, "", accessToken, tokenType);
+    }
+
+    @Override
+    public void setVariable(String key, String value) throws ShangCloudException {
+        client.variableAction("write", key, value, accessToken, tokenType);
+    }
+
+    @Override
+    public void deleteVariable(String key) throws ShangCloudException {
+        client.variableAction("delete", key, "", accessToken, tokenType);
+    }
+
     public int getExpiresIn() { return expiresIn; }
     public Instant getExpiryTime() { return expiryTime; }
     public String getTokenType() { return tokenType; }
